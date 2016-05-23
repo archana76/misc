@@ -19,74 +19,86 @@ import org.junit.Test;
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 
+/**
+ * Test class for {@link BasketPricer}
+ * 
+ * @author Administrator
+ *
+ */
 public class BasketPricerTests {
-	
-	private List<IFruit> fruitsBasket = new ArrayList<>();	;
+
+	private List<IFruit> fruitsBasket = new ArrayList<>();;
 	private BigDecimal expectedValue = BigDecimal.ZERO;
-	
-	
+
 	@Before
 	public void setUp() {
 		fruitsBasket.clear();
 		expectedValue = BigDecimal.ZERO;
 		fruitsBasket.add(Fruit.BANANA);
 		fruitsBasket.add(Fruit.APPLE);
-		fruitsBasket.add(Fruit.PEAR);
-		fruitsBasket.add(Fruit.GRAPE);
-		fruitsBasket.add(Fruit.MANGO);
+		fruitsBasket.add(Fruit.LEMON);
+		fruitsBasket.add(Fruit.PEACHES);
 		fruitsBasket.add(Fruit.ORANGE);
 		for (Fruit f : Fruit.values()) {
-			expectedValue = expectedValue.add(f.getPrice());			 
-		}			
+			expectedValue = expectedValue.add(f.getPrice());
+		}
 	}
-	
-	//send a null list to method
+
+	/**
+	 * Send a null list to test {@link BasketPricer#validateInput(List)}
+	 */
 	@Test(expected = IllegalArgumentException.class)
-    public final void whenIllegalArgumentThenExceptionIsThrown() {		
+	public final void whenIllegalArgumentThenExceptionIsThrown() {
 		BasketPricer.calculateBasketPrice(null);
-        
-    }
-	
-	//send a null fruit inside basket
+
+	}
+
+	/**
+	 * Send a null Fruit item in input list
+	 * {@link BasketPricer#calculateBasketPrice(List)}
+	 */
 	@Test(expected = RuntimeException.class)
-    public final void whenRuntimeExceptionIsThrown() {	
+	public final void whenRuntimeExceptionIsThrown() {
 		fruitsBasket.add(null);
 		System.out.println(BasketPricer.calculateBasketPrice(fruitsBasket));
-    }
-	
-	
-	//make sure we are summing up fruit prices correctly in basket
+	}
+
+	/**
+	 * make sure we are summing up fruit prices correctly in basket Test case to
+	 * cover {@link BasketPricer#calculateBasketPrice(List)}
+	 * 
+	 */
 	@Test
-    public final void assertBasketIsPricedCorrectly() {			
-		BigDecimal result = BasketPricer.calculateBasketPrice(fruitsBasket);		
-        Assert.assertEquals(expectedValue, result);
-    }
-	
-	
-    
-    //A Test Implementation of fruit interface
-    enum Fruit implements IFruit {
-    	
-    	APPLE(new BigDecimal(2.27)), ORANGE(new BigDecimal(2.07)), 
-    	MANGO(new BigDecimal(3.93)), GRAPE(new BigDecimal(1.79)), 
-    	BANANA(new BigDecimal(0.25)), PEAR(new BigDecimal(0.79));
+	public final void assertBasketIsPricedCorrectly() {
+		BigDecimal result = BasketPricer.calculateBasketPrice(fruitsBasket);
+		Assert.assertEquals(expectedValue, result);
+	}
 
-    	private BigDecimal price;
+	/**
+	 * stub implementation of IFruit to test out
+	 *
+	 */
+	enum Fruit implements IFruit {
 
-    	Fruit(BigDecimal price) {
-    		System.out.println("Name: " + this.name() + " initialized.");
-    		this.price = price;
-    	}
+		APPLE(new BigDecimal(2.27)), ORANGE(new BigDecimal(2.07)), PEACHES(new BigDecimal(3.93)), BANANA(
+				new BigDecimal(0.25)), LEMON(new BigDecimal(0.79));
 
-    	public BigDecimal getPrice() {
-    		return this.price;
-    	}
-    	
-    	@Override
-    	public String getName() {
-    		// TODO Auto-generated method stub
-    		return this.name();
-    	}
-    }
+		private BigDecimal price;
 
+		Fruit(BigDecimal price) {
+			System.out.println("Name: " + this.name() + " initialized.");
+			this.price = price;
+		}
+
+		@Override
+		public BigDecimal getPrice() {
+			return this.price;
+		}
+
+		@Override
+		public String getName() {
+			// TODO Auto-generated method stub
+			return this.name();
+		}
+	}
 }
